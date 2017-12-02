@@ -24,13 +24,13 @@ if [[ ! -d "$BUILD_DIR/snappy-build" ]]; then
 fi
 
 # This is for other buildpacks.
-echo "export LD_LIBRARY_PATH=/app/snappy-build/lib" > $BUILDPACK_DIR/export
-echo "export LD_RUN_PATH=/app/snappy-build/lib" >> $BUILDPACK_DIR/export
+#echo "export LD_LIBRARY_PATH=/app/snappy-build/lib" > $BUILDPACK_DIR/export
+#echo "export LD_RUN_PATH=/app/snappy-build/lib" >> $BUILDPACK_DIR/export
 
 # This is for the final app.
 mkdir -p $BUILD_DIR/.profile.d/
-echo "export LD_LIBRARY_PATH=/app/.profile.d/snappy-build/lib" > $BUILD_DIR/.profile.d/snappy.sh
-echo "export LD_RUN_PATH=/app/.profile.d/snappy-build/lib" >> $BUILD_DIR/.profile.d/snappy.sh
+#echo "export LD_LIBRARY_PATH=/app/.profile.d/snappy-build/lib" > $BUILD_DIR/.profile.d/snappy.sh
+#echo "export LD_RUN_PATH=/app/.profile.d/snappy-build/lib" >> $BUILD_DIR/.profile.d/snappy.sh
 
 # Otherwise it gets overwritten.
 cp -r /app/snappy-build $BUILD_DIR/.profile.d/snappy-build
@@ -41,3 +41,5 @@ cp $BUILD_DIR/.profile.d/snappy-build/lib/libsnappy.so.1 $BUILD_DIR/.heroku/pyth
 cp $BUILD_DIR/.profile.d/snappy-build/lib/libsnappy.la $BUILD_DIR/.heroku/python/lib
 cp $BUILD_DIR/.profile.d/snappy-build/lib/libsnappy.so $BUILD_DIR/.heroku/python/lib
 cp $BUILD_DIR/.profile.d/snappy-build/lib/libsnappy.a $BUILD_DIR/.heroku/python/lib
+
+pip install python-snappy
