@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+# bin/compile <build-dir> <cache-dir> <env-dir>
+
+set -e
+set -o pipefail
+
+# Build related variables.
+BUILD_DIR=${1:-}
+CACHE_DIR=${2:-}
+ENV_DIR=${3:-}
+BUILDPACK_DIR=$(cd $(dirname ${0:-}); cd ..; pwd)
+
+if [[ ! -d "$BUILD_DIR/snappy-build" ]]; then
+    mkdir -p $CACHE_DIR
+    mkdir -p $BUILD_DIR/vendor
+    cd $CACHE_DIR
+    rm -rf snappy || true
+    wget "https://github.com/google/snappy/releases/download/1.1.4/snappy-1.1.4.tar.gz"
+    tar xf snappy-1.1.4.tar.gz
+    mv snappy-1.1.4 snappy
+    cd snappy
+    ./configure --prefix="/app/snappy-build"
+    make install
+fi
+
+# This is for other buildpacks.
+#echo "export LD_LIBRARY_PATH=/app/snappy-build/lib" > $BUILDPACK_DIR/export
+#echo "export LD_RUN_PATH=/app/snappy-build/lib" >> $BUILDPACK_DIR/export
+
+# This is for the final app.
+mkdir -p $BUILD_DIR/.profile.d/
+#echo "export LD_LIBRARY_PATH=/app/.profile.d/snappy-build/lib" > $BUILD_DIR/.profile.d/snappy.sh
+#echo "export LD_RUN_PATH=/app/.profile.d/snappy-build/lib" >> $BUILD_DIR/.profile.d/snappy.sh
+
+# Otherwise it gets overwritten.
+cp -r /app/snappy-build $BUILD_DIR/.profile.d/snappy-build
+
+cp $BUILD_DIR/.profile.d/snappy-build/include/snappy-c.h $BUILD_DIR/.heroku/python/include/python2.7
+cp $BUILD_DIR/.profile.d/snappy-build/lib/libsnappy.so.1.3.1 $BUILD_DIR/.heroku/python/lib
+cp $BUILD_DIR/.profile.d/snappy-build/lib/libsnappy.so.1 $BUILD_DIR/.heroku/python/lib
+cp $BUILD_DIR/.profile.d/snappy-build/lib/libsnappy.la $BUILD_DIR/.heroku/python/lib
+cp $BUILD_DIR/.profile.d/snappy-build/lib/libsnappy.so $BUILD_DIR/.heroku/python/lib
+cp $BUILD_DIR/.profile.d/snappy-build/lib/libsnappy.a $BUILD_DIR/.heroku/python/lib
+
+pip install python-snappy==0.5.1
+pip install protobuf==3.5.0.post1
