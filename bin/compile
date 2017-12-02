@@ -34,3 +34,10 @@ echo "export LD_RUN_PATH=/app/.profile.d/snappy-build/lib" >> $BUILD_DIR/.profil
 
 # Otherwise it gets overwritten.
 cp -r /app/snappy-build $BUILD_DIR/.profile.d/snappy-build
+
+cp /app/.profile.d/snappy-build/include/snappy-c.h /app/.heroku/python/include/python2.7
+cp /app/.profile.d/snappy-build/lib/libsnappy.so.1.3.1 /app/.heroku/python/lib
+cp /app/.profile.d/snappy-build/lib/libsnappy.so.1 /app/.heroku/python/lib
+cp /app/.profile.d/snappy-build/lib/libsnappy.la /app/.heroku/python/lib
+cp /app/.profile.d/snappy-build/lib/libsnappy.so /app/.heroku/python/lib
+cp /app/.profile.d/snappy-build/lib/libsnappy.a /app/.heroku/python/lib
