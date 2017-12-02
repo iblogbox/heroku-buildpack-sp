@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# bin/use <build-dir>
+
+# We presume if this buildpack is added it's always wanted.
+
+echo "snappy"
+exit 0
