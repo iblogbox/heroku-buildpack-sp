@@ -19,4 +19,6 @@ cp $SOURCE_DIR/libsnappy.so $BUILD_DIR/.heroku/python/lib
 cp $SOURCE_DIR/libsnappy.a $BUILD_DIR/.heroku/python/lib
 
 pip install python-snappy==0.5.1
-pip install protobuf==3.5.0.post1
+
+#pip install protobuf==3.5.0.post1
+#pip install protobuf==2.6.1
